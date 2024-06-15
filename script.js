@@ -31,7 +31,7 @@ function loadWordsFromJson() {
 const apiKey = "AIzaSyCjKRvEzlvle-xwuCCCp_2sPOsF_8F-PdY";
 const sheetId = "11k4ClBe3J9teO098xKxbNulGNi6scjD-pnqKxW4sZ68";
 // Sheets 中要取得的資料範圍，格式如下
-const range = "B1:E86";
+const range = "B1:F86";
 // Sheets API 的 URL
 const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?valueRenderOption=FORMATTED_VALUE&key=${apiKey}`;
 // 加載單字列表的函數
@@ -51,7 +51,7 @@ window.onload = function(){
             word: item[1], // 英文
             partOfSpeech: item[2], // 词性
             翻譯: item[3], // 中文翻译
-            familiarity:"不熟悉"
+            familiarity: item[4]
           });
         }
       });
