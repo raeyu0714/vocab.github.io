@@ -113,7 +113,29 @@ function loadWords(category, familiarity, language) {
         wordList.textContent = 'No words found.';
     }
 }
-
+// update api
+function update(category,value,range) {
+    apipath = category
+    apivalue = value
+    //apivalue = 000
+    apirange = range
+    //urls = `https://script.google.com/macros/s/AKfycby5bgB3a9utCyrDg2AIOdqBgkcHGBsTXWqK2ZYmJLFH01oPllZlRBSivs_mdc-l3lxI/exec?path=C&action=update&range=F1&vlaue=2`
+    urls = `https://script.google.com/macros/s/AKfycby5bgB3a9utCyrDg2AIOdqBgkcHGBsTXWqK2ZYmJLFH01oPllZlRBSivs_mdc-l3lxI/exec?path=${apipath}&action=update&range=${range}&vlaue=${apivalue}`
+    fetch(urls)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        // 可以在這裡處理成功的回應
+        console.table(urls)
+        console.log('Request successful');
+      })
+      .catch(error => {
+        // 可以在這裡處理錯誤
+        console.error('There has been a problem with your fetch operation:', error);
+      });
+  }
+  
 // 随机化数组顺序的函数
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -128,9 +150,9 @@ function getFamiliarityHTML(familiarity) {
     let familiarityClass = '';
     switch (familiarity) {
         case '熟悉':
-            familiarityClass = 'familiarity-circle chose';
+            familiarityClass = 'familiarity-circle ';
             familiarityClass1 = 'familiarity-circle2';
-            familiarityClass2 = 'familiarity-circle3';
+            familiarityClass2 = 'familiarity-circle3 chose';
             break;
         case '普通':
             familiarityClass = 'familiarity-circle';
@@ -138,9 +160,9 @@ function getFamiliarityHTML(familiarity) {
             familiarityClass2 = 'familiarity-circle3';
             break;
         case '不熟悉':
-            familiarityClass = 'familiarity-circle';
+            familiarityClass = 'familiarity-circle chose';
             familiarityClass1 = 'familiarity-circle2';
-            familiarityClass2 = 'familiarity-circle3 chose';
+            familiarityClass2 = 'familiarity-circle3 ';
             break;
         default:
             familiarityClass = 'familiarity-circle';
@@ -150,11 +172,12 @@ function getFamiliarityHTML(familiarity) {
 
     return `
         <div class="familiar-container">
-            <span class="${familiarityClass2}" onclick="updateFamiliarityLevel(this, '不熟悉')"></span>
+            <span class="${familiarityClass2}" onclick="updateFamiliarityLevel(this, '熟悉')"></span>
             <span class="${familiarityClass1}" onclick="updateFamiliarityLevel(this, '普通')"></span>
-            <span class="${familiarityClass}" onclick="updateFamiliarityLevel(this, '熟悉')"></span>
+            <span class="${familiarityClass}" onclick="updateFamiliarityLevel(this, '不熟悉')"></span>
         </div>
     `;
+    
 }
 
 // 更新熟悉度并重新加载单词列表
@@ -167,36 +190,11 @@ function updateFamiliarityLevel(element, newFamiliarity) {
 
     // 重新渲染当前单词项
     loadWords(currentCategory, currentFamiliarity, currentLanguage);
-    //console.table(word["number"][4]);
+    update(currentCategory,newFamiliarity,"F"+(parseInt(word["number"][4])+parseInt(word["number"][3]*10)+parseInt(word["number"][2]*100)));
+    console.table(word["number"][4])
+    console.table(parseInt(word["number"][4])+parseInt(word["number"][3]*10)+parseInt(word["number"][2]*100));
     //modifyData(sheetId,"A1",[["1"]]);
 }
-async function modifyData(spreadsheetId, range, newValue) {
-    try {
-      // Initialize the Google Spreadsheet API
-      const doc = new GoogleSpreadsheet();
-      await doc.useServiceAccountAuth({
-        client_email: 'service-account@vocabluary.iam.gserviceaccount.com',
-        private_key: '-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDk207BZwoW1DCY\nZ/yhgNQKbnqzboldLy+6jNqsrrsap06ms9FJqq9RDctwSFPuTw2Zpn8UBaMrEHdn\nlO/dTW5iEg90qkqaYCh7LR2bxx8UxbSlNcVws+q1n2LeIHldBkf/ERJ3KmPl7U/L\nDyfE3DcQ+2mDNMlvx/yR8zAEol+u1Sh30dODHQi85jMH+HkJnjHlkM8CLGqGz3G5\npH6WrThAk8Mii4gGj1TZKHaVlTBSpYw65mN81asUo/lg5K8g3pqWCWmwJvD3+iZK\nAdmlP2S7nc8c5/0Mc1ewBoQdkJlUEHnvS7KUKk6JAwBO1cTkyVnvWHw2Dth9wIsY\nU+8d/SFXAgMBAAECggEAWgsloffCIvhKxHRJlFvFUfNlCJsppcXOkCYiVcYL7PE+\nA14FrufewdPdIuj6SO3Gqpk1L7IGIIgCivkxJQ/1qdV0SlFEOBg0ZT57g1Klmn0t\nVcFh1TWc1+gFtOLvDVhO1H8plkRR+OHVvs3QNmb0rZRVz99hkD8N03jtAC3I2tbZ\nyd72VG8GiFUKPBo/RDLjfDEiiPPxQsP39i8XOi/7bjKks4MAHQO0TWpW9vHLKZHQ\nKC9GT7G/K3UqJ2wtOZ7NVWbBTIY4mmDwsQCJznFprcZ5qQeTyivapbBVcIp0oIwT\nXnltlcpHD33zBWwDEVgJ7Op0rFRMNJ27YyL+1DewgQKBgQD8XeC5sHYqmaHv3myR\niNTgfPoFnjzTh3TVQLs96s4cgbT7wo1uilUE6bUjSTDZXg6eSfT7oidBouhK+rAd\nq5qaXOGOz2Z56WA0JULMGEom5z2IF2+gTnQmd2PXM0rD+FWgAkeWlZMrTLVuBfvO\nZTAWjbBh3uXzwKhYicF6jG1d1wKBgQDoJsgAbYu/42xs98rOCcMmnijdrCrwCkmV\nFFCGcq8OLpwc5hGr5jEYimGlCxFVxn0mJNo/nv5DvtI6DSrOtM9WMXr8UV2YX+bc\n4heMcPvF4cHwvdOxOj15CRH/XSvYVjKsgmpfbHh2H0xPeFJ1uRYIC/+fcXHPT05B\neF07OhrogQKBgQCZ2lmwmuXPXs4cwEsMBpFRMp/yYN/QTZpqkAYW31k8g87kVV2H\n8ImYbyphErPXMMJUud3Csr6gA0L+wwovbHjadpmESOi+lgpyf+zTJFPAl+UpXLBO\n2MVy1gJmJf0EsBbzb7BZG2MXWLKbGsbCs2m3tjW71Pn3upJnN8Reg9IBDQKBgFZQ\nrQYztMUo2tR9IUOQL6X5IjqhW+mZ+ZfbUMFcfKfqPpMkG6ftU43LTdjej5hzz25S\nP29uPx2TInkBEkx+v6RNi2urGQChj6XKznSiQYpmkQRgoAgCHn8VF0L6MmYiTn8D\nkmdeXj+VDXtywj4RDhb51xZCSM2KsA75oLh3ty+BAoGBAPbzilANDHiWPQHijWoh\n89HGJ9AJIq4d/t01ISAqrJaUjRfcozT6gY+QKJZ1LA3dHbfn0s4RXM/N9DuUuE5s\nhin6GJNkFlq+j04pWQih2ArR2BqzKC5hF8241MgRLWwFiYerR97X1uOFY01o16l+\n7CpguWkNqjPiWVzzDAd6pDw3\n-----END PRIVATE KEY-----\n'
-      });
-  
-      // Load the spreadsheet
-      await doc.loadInfo();
-  
-      // Get the worksheet
-      const worksheet = doc.sheetsById[0];
-  
-      // Update the cell value
-      await worksheet.updateCell(range, newValue);
-  
-      // Save the changes
-      await worksheet.save();
-  
-      console.log('Data modified successfully.');
-    } catch (err) {
-      console.error(err);
-    }
-  }
-  
 // 更新类别并重新加载单词列表
 function updateCategory(category) {
     currentCategory = category;
