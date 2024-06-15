@@ -10,7 +10,7 @@ window.onload = function() {
 const apiKey = "AIzaSyCjKRvEzlvle-xwuCCCp_2sPOsF_8F-PdY";
 const sheetId = "11k4ClBe3J9teO098xKxbNulGNi6scjD-pnqKxW4sZ68";
 // Sheets 中要取得的数据范围，格式如下
-const range = "B1:F86";
+const range = "B1:F140";
 // Sheets API 的 URL
 const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?valueRenderOption=FORMATTED_VALUE&key=${apiKey}`;
 
