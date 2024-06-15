@@ -85,29 +85,52 @@ button:hover {
     }
 }
 
-.familiarity-container {
-    margin-top: 0.5em;
-    display: flex;
-    justify-content: center;
-}
-
-.familiarity-circle{
+.familiarity-circle {
     font-size: 1.5em;
     margin: 0 0.2em;
     border-radius: 50%;
     width: 20px;
     height: 20px;
     display: inline-block;
+    background-color: #d94f4f; /*灰色*/ 
+    cursor: pointer; /* 鼠標變成指針 */
 }
-.familiar {
-    background-color: #4CAF50; /* 绿色 */
+.familiarity-circle.chose{
+    border: 2px solid #000000; 
 }
-.familiar2 {
-    background-color: #d94f4f; /* 绿色 */
+.familiarity-circle2 {
+    font-size: 1.5em;
+    margin: 0 0.2em;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    background-color:  #f0ad4e; /*灰色*/ 
+    cursor: pointer; /* 鼠標變成指針 */
 }
-.familiar3 {
-    background-color: #f0ad4e; /* 绿色 */
+.familiarity-circle2.chose{
+    border: 2px solid #000000; 
 }
+.familiarity-circle3 {
+    font-size: 1.5em;
+    margin: 0 0.2em;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    background-color:  #4CAF50; /*灰色*/ 
+    cursor: pointer; /* 鼠標變成指針 */
+}
+.familiarity-circle3.chose{
+    border: 2px solid #000000; 
+}
+.familiar-container {
+    display: inline-block;
+    padding: 5px;
+    border-radius: 50%;
+    position: relative;
+}
+
 
 /* 新增按钮选中状态的样式 */
 .filter-btn.active {
