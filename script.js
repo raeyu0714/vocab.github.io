@@ -50,7 +50,7 @@ window.onload = function(){
           words[category].push({
             word: item[1], // 英文
             partOfSpeech: item[2], // 词性
-            chinese: item[3], // 中文翻译
+            翻譯: item[3], // 中文翻译
             familiarity:"不熟悉"
           });
         }
