@@ -202,7 +202,10 @@ function updateCategory(category) {
     currentCategory = category;
     loadWords(currentCategory, currentFamiliarity, currentLanguage);
 }
-
+function updateword() {
+    getapi();
+    loadWords(currentCategory, currentFamiliarity, currentLanguage);
+}
 // 更新熟悉度并重新加载单词列表
 function updateFamiliarity(familiarity) {
     currentFamiliarity = familiarity;
