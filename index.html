@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Learning Website</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Word Learning Website</h1>
+    </header>
+    <main>
+        <section class="category">
+            <h2>Select a Category</h2>
+            <button onclick="updateCategory('animals')">Animals</button>
+            <button onclick="updateCategory('fruits')">Fruits</button>
+            <button onclick="updateCategory('colors')">Colors</button>
+            <button onclick="updateCategory('C')">C</button>
+        </section>
+        <section class="category">
+            <h2>Filter by Familiarity</h2>
+            <button onclick="updateFamiliarity('熟悉')">Familiar</button>
+            <button onclick="updateFamiliarity('普通')">Normal</button>
+            <button onclick="updateFamiliarity('不熟悉')">Unfamiliar</button>
+            <button onclick="updateFamiliarity('all')">Reset</button>
+        </section>
+        <section class="category">
+            <h2>Filter by Language</h2>
+            <button onclick="updateLanguage('chinese')">Chinese</button>
+            <button onclick="updateLanguage('english')">English</button>
+            <button onclick="updateLanguage('all')">Reset</button>
+        </section>
+        <section class="words" id="words">
+            <h2>Words</h2>
+            <div id="wordList"></div>
+        </section>
+    </main>
+    <script src="https://apis.google.com/js/api.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

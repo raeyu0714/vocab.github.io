@@ -1,0 +1,167 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #f0f0f0;
+}
+
+header {
+    background-color: #4CAF50;
+    color: white;
+    text-align: center;
+    padding: 1em 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+main {
+    padding: 1em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.category, .words {
+    background-color: white;
+    padding: 1em;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 1em 0;
+    width: 80%;
+    max-width: 600px;
+}
+
+button {
+    margin: 0.5em;
+    padding: 0.5em 1em;
+    border: none;
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+#wordList {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.word-item {
+    background-color: #f4f4f4;
+    margin: 0.5em;
+    padding: 1em;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    text-align: center;
+}
+
+.word-item h3 {
+    margin: 0.5em 0;
+}
+
+.word-item p {
+    margin: 0.3em 0;
+}
+
+@media (max-width: 600px) {
+    main {
+        padding: 0.5em;
+    }
+
+    button {
+        padding: 0.5em;
+        font-size: 0.9em;
+    }
+
+    .word-item {
+        width: 100%;
+    }
+}
+
+.familiarity-container {
+    margin-top: 0.5em;
+    display: flex;
+    justify-content: center;
+}
+
+.familiarity-circle{
+    font-size: 1.5em;
+    margin: 0 0.2em;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+}
+.familiar {
+    background-color: #4CAF50; /* 绿色 */
+}
+.familiar2 {
+    background-color: #d94f4f; /* 绿色 */
+}
+.familiar3 {
+    background-color: #f0ad4e; /* 绿色 */
+}
+
+/* 新增按钮选中状态的样式 */
+.filter-btn.active {
+    border: 2px solid #4CAF50; /* 选中状态的外圈颜色 */
+}
+
+/* 其他样式保持不变 */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #f0f0f0;
+}
+
+header {
+    background-color: #4CAF50;
+    color: white;
+    text-align: center;
+    padding: 1em 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+main {
+    padding: 1em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.category, .words {
+    background-color: white;
+    padding: 1em;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 1em 0;
+    width: 80%;
+    max-width: 600px;
+}
+
+.filter-btn {
+    margin: 0.5em;
+    padding: 0.5em 1em;
+    border: none;
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.filter-btn:hover {
+    background-color: #45a049;
+}
+.filter-btn.active {
+    border: 2px solid #4CAF50; /* 选中状态的外圈颜色 */
+}
