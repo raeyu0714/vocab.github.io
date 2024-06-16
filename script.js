@@ -18,11 +18,12 @@ const range = "B1:F159";
 window.onload = function() {
     getapi();
 };
+rangearry = ["B1:F159","B1:F159","B1:F171"]
 let words = {}; // 存放从 JSON 文件中加载的单词数据
 function getapi() {
     words = {};
     for (var i=0; i<3; i++) {
-        url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${String.fromCharCode(i+65)}!B1:159?valueRenderOption=FORMATTED_VALUE&key=${apiKey}`;
+        url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${String.fromCharCode(i+65)}!${rangearry[i]}?valueRenderOption=FORMATTED_VALUE&key=${apiKey}`;
         fetch(url)
             .then((response) => response.json())
             .then((data) => {
