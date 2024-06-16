@@ -1,4 +1,4 @@
-let currentCategory = 'C'; // 初始类别为动物
+let currentCategory = 'A'; // 初始类别为动物
 let currentFamiliarity = 'all'; // 初始熟悉度为全部
 let currentLanguage = 'all'; // 初始语言为全部
 //const { GoogleSpreadsheet } = require('google-spreadsheet');
@@ -10,42 +10,44 @@ window.onload = function() {
 const apiKey = "AIzaSyCjKRvEzlvle-xwuCCCp_2sPOsF_8F-PdY";
 const sheetId = "11k4ClBe3J9teO098xKxbNulGNi6scjD-pnqKxW4sZ68";
 // Sheets 中要取得的数据范围，格式如下
-const range = "B1:F140";
+const range = "B1:F159";
 // Sheets API 的 URL
-const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?valueRenderOption=FORMATTED_VALUE&key=${apiKey}`;
+//const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?valueRenderOption=FORMATTED_VALUE&key=${apiKey}`;
 
 // 加载单词列表的函数
 window.onload = function() {
     getapi();
 };
-
 let words = {}; // 存放从 JSON 文件中加载的单词数据
 function getapi() {
     words = {};
-    fetch(url)
-        .then((response) => response.json())
-        .then((data) => {
-            data.values.forEach(item => {
-                if (item.length >= 2) {
-                    const category = item[1][0]; // 提取 "C-001" 的第一个字母作为 category
-                    if (!words[category]) {
-                        words[category] = []; // 如果 category 不存在，则创建一个空数组
+    for (var i=0; i<3; i++) {
+        url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${String.fromCharCode(i+65)}!B1:159?valueRenderOption=FORMATTED_VALUE&key=${apiKey}`;
+        fetch(url)
+            .then((response) => response.json())
+            .then((data) => {
+                data.values.forEach(item => {
+                    if (item.length >= 2) {
+                        const category = item[1][0]; // 提取 "C-001" 的第一个字母作为 category
+                        if (!words[category]) {
+                            words[category] = []; // 如果 category 不存在，则创建一个空数组
+                        }
+                        // 将 "C-001" 后面的部分作为一个对象放入数组中
+                        words[category].push({
+                            number: item[0],
+                            word: item[1], // 英文
+                            partOfSpeech: item[2], // 词性
+                            翻译: item[3], // 中文翻译
+                            familiarity: item[4]
+                        });
                     }
-                    // 将 "C-001" 后面的部分作为一个对象放入数组中
-                    words[category].push({
-                        number: item[0],
-                        word: item[1], // 英文
-                        partOfSpeech: item[2], // 词性
-                        翻译: item[3], // 中文翻译
-                        familiarity: item[4]
-                    });
-                }
-            });
-            console.table(data);
-            console.table(words);
-            loadWords(currentCategory, currentFamiliarity, currentLanguage);
-        })
-        .catch((error) => console.error("Error:", error));
+                });
+                console.table(data);
+                console.table(words);
+                loadWords(currentCategory, currentFamiliarity, currentLanguage);
+            })
+            .catch((error) => console.error("Error:", error));
+        }
 }
 
 function updateCategory(category) {
