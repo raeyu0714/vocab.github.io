@@ -1,80 +1,53 @@
+<!-- login.html -->
 <!DOCTYPE html>
 <html lang="en">
-<script src='//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js'></script>
-<style>
-/* Go Top 按鈕 */
-#goTop {
-    position: fixed;
-    bottom: 5px; /* 與下方的距離, 也可改為百分比, 即為距離螢幕下方的百分比 */
-    right: 5px; /* 與右方的距離 */
-    width: 40px; /* 按鈕原始寬度 */
-    height: 40px; /* 按鈕原始高度 */
-    opacity: 0.4; /* 按鈕原始透明度 */
-    z-index: 10;
-    cursor: pointer;
-    transition: all .5s; /* 動畫效果 持續期間 */
-    -webkit-transition: all .5s;
-    -moz-transition: all .5s;
-    }
-#goTop:hover { /* 滑鼠經過按鈕時 */
-    opacity: 1; /* 透明度 */
-    width: 80px; /* 按鈕寬度 */
-    height: 80px; /* 按鈕高度 */
-    }
-    </style>
-    
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Word Learning Website</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="script.js"></script>
+    <title>Login Page</title>
+    <style>
+        /* CSS 样式保持不变 */
+    </style>
 </head>
-<!-- Go Top 按鈕+動畫 start -->
-<img id="goTop" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiuf4zFMaQrAd4_8rOn0OcFt2OSZTRQ9hRxRu2RgQ3ahuod-kCN7E3DgGwJQMycnsab_W4xgEzvoRB_YvJDn_Qq0RH2_yTnnhufjXMwKXapgrWKSoa9dhfKAwpwoHAeIx-nGyNNerR-AE5p/s100/up-button.png" title="Back to Top"/>
-<script>
-$.extend($.easing, {
-easeOutExpo: function (x, t, b, c, d) {
-return (t==d) ? b+c : c * (-Math.pow(2, -10 * t/d) + 1) + b;
-}
-});
-$("#goTop").click(function(){
-$("html, body").animate({scrollTop: 0}, 1000, "easeOutExpo");
-});
-</script>
-<!-- Go Top 按鈕+動畫 end, Designed by WFU BLOG -->
-
 <body>
-    <header>
-        <h1>Word Learning Website</h1>
-    </header>
-    <main>
-        <section class="category">
-            <h2>Select a Category</h2>
-            <button onclick="updateCategory('A')">A</button>
-            <button onclick="updateCategory('B')">B</button>
-            <button onclick="updateCategory('C')">C</button>
-            <button onclick="updateword('upword')">重載</button>
-        </section>
-        <section class="category">
-            <h2>Filter by Familiarity</h2>
-            <button onclick="updateFamiliarity('熟悉')">熟悉</button>
-            <button onclick="updateFamiliarity('普通')">普通</button>
-            <button onclick="updateFamiliarity('不熟悉')">不熟悉</button>
-            <button onclick="updateFamiliarity('all')">重置</button>
-        </section>
-        <section class="category">
-            <h2>Filter by Language</h2>
-            <button onclick="updateLanguage('chinese')">Chinese</button>
-            <button onclick="updateLanguage('english')">English</button>
-        </section>
-        <section class="words" id="words">
-            <h2>Words</h2>
-            <div id="wordList"></div>
-        </section>
+    <div class="login-form">
+        <h2>Login</h2>
+        <form id="loginForm">
+            <input type="text" id="username" name="username" placeholder="Username" required>
+            <br>
+            <input type="password" id="password" name="password" placeholder="Password" required>
+            <br>
+            <button type="submit">Login</button>
+        </form>
+    </div>
 
-    </main>
-    <script src="https://apis.google.com/js/api.js"></script>
-    <script src="script.js"></script>
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var username = document.getElementById('username').value;
+            var password = document.getElementById('password').value;
+
+            // Fetch users data from JSON file
+            fetch('users.json')
+                .then(response => response.json())
+                .then(users => {
+                    // Validation loop through the users array
+                    var validUser = users.find(function(user) {
+                        return user.username === username && user.password === password;
+                    });
+
+                    if (validUser) {
+                        alert('Login successful');
+                        // Store the current logged in user in localStorage
+                        localStorage.setItem('loggedInUser', username);
+                        // Redirect to your original page (ori.html)
+                        window.location.href = 'index1.html';
+                    } else {
+                        alert('Login failed. Please check your username and password.');
+                    }
+                })
+                .catch(error => console.error('Error fetching users data:', error));
+        });
+    </script>
 </body>
 </html>
