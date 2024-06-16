@@ -6,7 +6,7 @@ let currentLanguage = 'all'; // 初始语言为全部
 window.onload = function() {
     loadWordsFromJson();
 };
-
+shf =0;
 const apiKey = "AIzaSyCjKRvEzlvle-xwuCCCp_2sPOsF_8F-PdY";
 const sheetId = "11k4ClBe3J9teO098xKxbNulGNi6scjD-pnqKxW4sZ68";
 // Sheets 中要取得的数据范围，格式如下
@@ -61,26 +61,34 @@ function loadWords(category, familiarity, language) {
     wordList.innerHTML = ''; // 清空之前的单词列表
 
     if (words[category]) {
-        const filteredWords = words[category].filter(wordObj => {
-            // 检查熟悉度条件
-            if (familiarity !== 'all' && wordObj.familiarity !== familiarity) {
-                return false;
-            }
-
-            // 检查语言条件
-            if (language !== 'all') {
-                if (language === 'chinese' && !wordObj.翻译) {
+        if(shf==0)
+        {
+            filteredWords = words[category].filter(wordObj => {
+                // 检查熟悉度条件
+                if (familiarity !== 'all' && wordObj.familiarity !== familiarity) {
                     return false;
                 }
-                if (language === 'english' && !wordObj.word) {
-                    return false;
+
+                // 检查语言条件
+                if (language !== 'all') {
+                    if (language === 'chinese' && !wordObj.翻译) {
+                        return false;
+                    }
+                    if (language === 'english' && !wordObj.word) {
+                        return false;
+                    }
                 }
-            }
 
-            return true; // 符合所有条件的单词
-        });
-
-        filteredWords.forEach(wordObj => {
+                return true; // 符合所有条件的单词
+            });
+        }
+        if(shf==0) {shuffledWords = shuffleArray(filteredWords); console.table(shuffledWords);}
+        else {
+            console.table(filteredWords);
+            shuffledWords=filteredWords; shf=0;
+            console.table(shuffledWords);
+        }
+        shuffledWords.forEach(wordObj => {
             const wordItem = document.createElement('div');
             wordItem.className = 'word-item';
 
@@ -189,8 +197,10 @@ function updateFamiliarityLevel(element, newFamiliarity) {
     const wordIndex = Array.from(wordItem.parentNode.children).indexOf(wordItem);
     const word = words[currentCategory][wordIndex];
     word.familiarity = newFamiliarity;
+    filteredWords[wordIndex]["familiarity"] = newFamiliarity;
+    console.table(filteredWords[0]["familiarity"]);
     console.table(word);
-
+    shf=1;
     // 重新渲染当前单词项
     loadWords(currentCategory, currentFamiliarity, currentLanguage);
     update(currentCategory,newFamiliarity,"F"+(parseInt(word["number"][4])+parseInt(word["number"][3]*10)+parseInt(word["number"][2]*100)));
