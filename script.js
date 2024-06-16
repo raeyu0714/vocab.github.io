@@ -195,17 +195,17 @@ function getFamiliarityHTML(familiarity) {
 function updateFamiliarityLevel(element, newFamiliarity) {
     const wordItem = element.closest('.word-item');
     const wordIndex = Array.from(wordItem.parentNode.children).indexOf(wordItem);
-    const word = words[currentCategory][wordIndex];
-    word.familiarity = newFamiliarity;
+    //const word = filteredWords[currentCategory][wordIndex];
+    //word.familiarity = newFamiliarity;
     filteredWords[wordIndex]["familiarity"] = newFamiliarity;
     console.table(filteredWords[0]["familiarity"]);
-    console.table(word);
+    //console.table(word);
     shf=1;
     // 重新渲染当前单词项
     loadWords(currentCategory, currentFamiliarity, currentLanguage);
-    update(currentCategory,newFamiliarity,"F"+(parseInt(word["number"][4])+parseInt(word["number"][3]*10)+parseInt(word["number"][2]*100)));
-    console.table(word["number"][4])
-    console.table(parseInt(word["number"][4])+parseInt(word["number"][3]*10)+parseInt(word["number"][2]*100));
+    update(currentCategory,newFamiliarity,"F"+(parseInt(filteredWords[wordIndex]["number"][4])+parseInt(filteredWords[wordIndex]["number"][3]*10)+parseInt(filteredWords[wordIndex]["number"][2]*100)));
+    //console.table(word["number"][4])
+    //console.table(parseInt(word["number"][4])+parseInt(word["number"][3]*10)+parseInt(word["number"][2]*100));
     //modifyData(sheetId,"A1",[["1"]]);
 }
 // 更新类别并重新加载单词列表
