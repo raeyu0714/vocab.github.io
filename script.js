@@ -1,29 +1,88 @@
 let currentCategory = 'A'; // 初始类别为动物
 let currentFamiliarity = 'all'; // 初始熟悉度为全部
 let currentLanguage = 'all'; // 初始语言为全部
-//const { GoogleSpreadsheet } = require('google-spreadsheet');
-// 网页加载完成后执行的函数
+// script.js
+var validUsersh;
+var validUserurl;
+// 等待页面加载完成后执行
+document.addEventListener('DOMContentLoaded', function() {
+    // 获取登录表单
+    var loginForm = document.getElementById('loginForm');
+
+    // 添加表单提交事件监听器
+    loginForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        var username = document.getElementById('username').value;
+        var password = document.getElementById('password').value;
+        validUsers = username;
+
+        // 调用处理登录的函数
+        handleLogin(username, password);
+    });
+});
+// 定义一个处理登录的函数
+function handleLogin(username, password) {
+    // 全局变量用于存储当前用户的 thing 值
+    // Fetch users data from JSON file
+    fetch('users.json')
+        .then(response => response.json())
+        .then(users => {
+            // Validation loop through the users array
+            validUser = users.find(function(user) {
+                return user.username === username && user.password === password;
+            });
+
+            if (validUser) {
+                //alert('Login successful');
+                // Store the current logged in user's thing value in global variable
+                validUsersh = validUser.spreadsheetid;
+                validUserurl = validUser.userurl;
+                console.table(validUsers);
+                getapi();
+                document.getElementById('loginForm').style.display = 'none';
+                document.getElementById('logoutButton').style.display = 'block';
+            } else {
+                document.getElementById("loginForm").reset();
+                //alert('Login failed. Please check your username and password.');
+            }
+        })
+        .catch(error => console.error('Error fetching users data:', error));
+}
+
+
+function handleLogout() {
+    // Clear any user-specific data if needed
+    // Show login form and hide logout button
+    document.getElementById('loginForm').style.display = 'block';
+    document.getElementById('logoutButton').style.display = 'none';
+    validUsersh = null;
+    validUserurl = null;
+    location.reload();
+    alert('Logged out successfully');
+}
 window.onload = function() {
-    loadWordsFromJson();
 };
 shf =0;
 const apiKey = "AIzaSyCjKRvEzlvle-xwuCCCp_2sPOsF_8F-PdY";
-const sheetId = "11k4ClBe3J9teO098xKxbNulGNi6scjD-pnqKxW4sZ68";
+//const sheetId = "11k4ClBe3J9teO098xKxbNulGNi6scjD-pnqKxW4sZ68";
 // Sheets 中要取得的数据范围，格式如下
 const range = "B1:F159";
 // Sheets API 的 URL
 //const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?valueRenderOption=FORMATTED_VALUE&key=${apiKey}`;
 
 // 加载单词列表的函数
+/*
 window.onload = function() {
     getapi();
 };
+*/
 rangearry = ["B1:F159","B1:F159","B1:F171"]
 let words = {}; // 存放从 JSON 文件中加载的单词数据
 function getapi() {
+    console.table(validUsers)
     words = {};
     for (var i=0; i<3; i++) {
-        url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${String.fromCharCode(i+65)}!${rangearry[i]}?valueRenderOption=FORMATTED_VALUE&key=${apiKey}`;
+        url = `https://sheets.googleapis.com/v4/spreadsheets/${validUsersh}/values/${String.fromCharCode(i+65)}!${rangearry[i]}?valueRenderOption=FORMATTED_VALUE&key=${apiKey}`;
         fetch(url)
             .then((response) => response.json())
             .then((data) => {
@@ -45,6 +104,7 @@ function getapi() {
                 });
                 console.table(data);
                 console.table(words);
+                console.table(validUser);
                 loadWords(currentCategory, currentFamiliarity, currentLanguage);
             })
             .catch((error) => console.error("Error:", error));
@@ -126,12 +186,15 @@ function loadWords(category, familiarity, language) {
 }
 // update api
 function update(category,value,range) {
+    console.table(validUserurl);
     apipath = category
     apivalue = value
     //apivalue = 000
     apirange = range
     //urls = `https://script.google.com/macros/s/AKfycby5bgB3a9utCyrDg2AIOdqBgkcHGBsTXWqK2ZYmJLFH01oPllZlRBSivs_mdc-l3lxI/exec?path=C&action=update&range=F1&vlaue=2`
-    urls = `https://script.google.com/macros/s/AKfycby5bgB3a9utCyrDg2AIOdqBgkcHGBsTXWqK2ZYmJLFH01oPllZlRBSivs_mdc-l3lxI/exec?path=${apipath}&action=update&range=${range}&vlaue=${apivalue}`
+    //console.table(validUserurl);
+    urls = `https://script.google.com/macros/s/${validUserurl}exec?path=${apipath}&action=update&range=${range}&vlaue=${apivalue}`
+    console.table(urls);
     fetch(urls)
       .then(response => {
         if (!response.ok) {
