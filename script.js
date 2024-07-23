@@ -76,7 +76,7 @@ window.onload = function() {
     getapi();
 };
 */
-rangearry = ["B1:F159","B1:F50","B1:F171","B1:F135","B1:F112","B1:F97","B1:F37","B1:F47","B1:F137","B1:F5","B1:F4","B1:F51","B1:F81","B1:F25","B1:F55","B1:F147","B1:F8","B1:F152","B1:F173","B1:F78","B1:F22","B1:F35","B1:F20","B1:F1","B1:F1","B1:F1"]
+rangearry = ["B1:F159","B1:F50","B1:F195","B1:F135","B1:F112","B1:F97","B1:F37","B1:F47","B1:F137","B1:F5","B1:F4","B1:F51","B1:F81","B1:F25","B1:F55","B1:F147","B1:F8","B1:F152","B1:F173","B1:F78","B1:F22","B1:F35","B1:F20","B1:F1","B1:F1","B1:F1"]
 let words = {}; // 存放从 JSON 文件中加载的单词数据
 function getapi() {
     console.table(validUsers)
