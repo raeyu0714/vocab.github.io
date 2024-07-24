@@ -39,6 +39,7 @@ function handleLogin(username, password) {
                 validUserurl = validUser.userurl;
                 console.table(validUsers);
                 getapi();
+                //getsentence('Hello')
                 document.getElementById('loginForm').style.display = 'none';
                 document.getElementById('logoutButton').style.display = 'block';
             } else {
@@ -76,13 +77,15 @@ window.onload = function() {
     getapi();
 };
 */
-rangearry = ["B1:F159","B1:F50","B1:F195","B1:F135","B1:F112","B1:F97","B1:F37","B1:F47","B1:F137","B1:F5","B1:F4","B1:F51","B1:F81","B1:F25","B1:F55","B1:F147","B1:F8","B1:F152","B1:F173","B1:F78","B1:F22","B1:F35","B1:F20","B1:F1","B1:F1","B1:F1"]
+rangearry = ["B1:H159","B1:H50","B1:H195","B1:H135","B1:H112","B1:H97","B1:H37","B1:H47","B1:H137","B1:H5","B1:H4","B1:H51","B1:H81","B1:H25","B1:H55","B1:H147","B1:H8","B1:H152","B1:H173","B1:H78","B1:H22","B1:H35","B1:H20","B1:H1","B1:H1","B1:H1"]
 let words = {}; // 存放从 JSON 文件中加载的单词数据
 function getapi() {
     console.table(validUsers)
     words = {};
     for (var i=0; i<26; i++) {
         url = `https://sheets.googleapis.com/v4/spreadsheets/${validUsersh}/values/${String.fromCharCode(i+65)}!${rangearry[i]}?valueRenderOption=FORMATTED_VALUE&key=${apiKey}`;
+        console.log(url);
+        //getsentence("hello");
         fetch(url)
             .then((response) => response.json())
             .then((data) => {
@@ -98,8 +101,11 @@ function getapi() {
                             word: item[1], // 英文
                             partOfSpeech: item[2], // 词性
                             翻译: item[3], // 中文翻译
-                            familiarity: item[4]
+                            familiarity: item[4],
+                            sentence : item[5],
+                            //audio : item[6]
                         });
+                        //getsentence(item[1]);
                     }
                 });
                 console.table(data);
@@ -156,27 +162,46 @@ function loadWords(category, familiarity, language) {
             word.textContent = language === 'chinese' ? wordObj.翻译 : wordObj.word;
             wordItem.appendChild(word);
 
+
             const partOfSpeech = document.createElement('h3');
             partOfSpeech.textContent = `词性: ${wordObj.partOfSpeech}`;
             wordItem.appendChild(partOfSpeech);
 
+            const audiobutton = document.createElement('button');
+            audiobutton.setAttribute("class", "fa fa-volume-up");
+            audiobutton.textContent = '';
+            audiobutton.onclick = () => {
+                playAudio(wordObj.word)
+            };
+            wordItem.appendChild(audiobutton);
+
+            const sentence = document.createElement('h4');
+            //sentence.textContent = language === 'chinese' ? `单词: ${wordObj.word}` : `Translation: ${wordObj.翻译}`;
+            //sentence.textContent = `例句: ${wordObj.sentence}`;
+            //sentence.textContent = `例句: ${getsentence(wordObj.word)}`;
+            //wordItem.appendChild(sentence);
+
             const translation = document.createElement('h3');
             translation.textContent = language === 'chinese' ? `单词: ${wordObj.word}` : `Translation: ${wordObj.翻译}`;
+            sentence.textContent = `例句: ${wordObj.sentence}`;
             translation.style.display = 'none'; // 初始隐藏翻译
+            sentence.style.display = 'none';
             wordItem.appendChild(translation);
+            wordItem.appendChild(sentence);
 
+            const showTranslationButton = document.createElement('button');
+            showTranslationButton.textContent = 'Show Translation & Sentence';
+            showTranslationButton.onclick = () => {
+                translation.style.display = 'block';
+                sentence.style.display='block'
+                showTranslationButton.style.display = 'none';
+            };
+            
             const familiarityContainer = document.createElement('div');
             familiarityContainer.className = 'familiarity-container';
             familiarityContainer.innerHTML = getFamiliarityHTML(wordObj.familiarity); // 添加熟悉度圆圈的 HTML
-            wordItem.appendChild(familiarityContainer);
-
-            const showTranslationButton = document.createElement('button');
-            showTranslationButton.textContent = 'Show Translation';
-            showTranslationButton.onclick = () => {
-                translation.style.display = 'block';
-                showTranslationButton.style.display = 'none';
-            };
             wordItem.appendChild(showTranslationButton);
+            wordItem.appendChild(familiarityContainer);
 
             wordList.appendChild(wordItem);
         });
@@ -209,7 +234,14 @@ function update(category,value,range) {
         console.error('There has been a problem with your fetch operation:', error);
       });
   }
-  
+//audio
+function playAudio(word) {
+    const audio = document.createElement("audio");
+    //audio.src = audiourl;
+    audio.src = `https://d1qx7pbj0dvboc.cloudfront.net/${word.toLowerCase()}.mp3`
+    audio.play();
+    }
+
 // 随机化数组顺序的函数
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -218,7 +250,6 @@ function shuffleArray(array) {
     }
     return array;
 }
-
 // 根据熟悉度返回不同的 HTML 代码
 function getFamiliarityHTML(familiarity) {
     let familiarityClass = '';
